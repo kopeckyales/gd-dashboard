@@ -1,0 +1,9 @@
+@import "../../theme.scss";
+
+.FilterBar {
+    width: 100%;
+    display: flex;
+    border: 1px solid $color-border;
+    border-radius: 3px;
+    padding: 8px 24px;
+}

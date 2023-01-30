@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Redirect, Route } from "react-router-dom";
 
 import { WorkspaceProvider } from "../contexts/Workspace";
 import Page from "../components/Page";
@@ -11,14 +11,13 @@ import Home from "./Home";
 
 import styles from "./AppRouter.module.scss";
 
-// Uncomment these lines if you want to redirect unauthorized users to login form
-// import { useAuth } from "../contexts/Auth";
-// import { AuthStatus } from "../contexts/Auth/state";
-// const RedirectIfNotLoggedIn: React.FC = () => {
-//     const auth = useAuth();
-//     const shouldRedirectToLogin = auth.authStatus === AuthStatus.UNAUTHORIZED;
-//     return shouldRedirectToLogin ? <Route component={() => <Redirect to="/login" />} /> : null;
-// };
+import { useAuth } from "../contexts/Auth";
+import { AuthStatus } from "../contexts/Auth/state";
+const RedirectIfNotLoggedIn: React.FC = () => {
+    const auth = useAuth();
+    const shouldRedirectToLogin = auth.authStatus === AuthStatus.UNAUTHORIZED;
+    return shouldRedirectToLogin ? <Route component={() => <Redirect to="/login" />} /> : null;
+};
 
 const AppRouter: React.FC = () => {
     return (
@@ -32,7 +31,7 @@ const AppRouter: React.FC = () => {
                     <Route exact path="/login" component={Login} />
                     <Route exact path="/logout" component={Logout} />
                     {/* Uncomment the next line if you want to redirect unauthorized users to login form */}
-                    {/* <RedirectIfNotLoggedIn /> */}
+                    <RedirectIfNotLoggedIn />
                 </WorkspaceProvider>
             </Router>
         </div>
