@@ -1,38 +1,66 @@
-import { useCallback, useState } from "react";
-import { maximumRevenue, minimumRevenue, medianRevenue } from "../calculations";
+import { IDataSeries } from "@gooddata/sdk-ui";
+import { useCallback, useMemo, useState } from "react";
+import { maximumRevenue, minimumRevenue, medianRevenue, quantileRevenue } from "../calculations";
 
-const calculations = [
+export type CalculationKey = "median" | "min" | "max" | "quantile";
+
+type CalculationInfo = {
+    key: CalculationKey;
+    label: string;
+    hasUserInput: boolean;
+};
+
+const calculationList: CalculationInfo[] = [
     {
         key: "median",
         label: "Median revenue",
-        calculationFn: medianRevenue,
+        hasUserInput: false,
     },
     {
         key: "min",
         label: "Minimum revenue",
-        calculationFn: minimumRevenue,
+        hasUserInput: false,
     },
     {
         key: "max",
         label: "Maximum revenue",
-        calculationFn: maximumRevenue,
+        hasUserInput: false,
     },
-] as const;
+    {
+        key: "quantile",
+        label: "Quantile",
+        hasUserInput: true,
+    },
+];
 
-export type Calculation = typeof calculations[number];
-
-export type CalculationKey = Calculation["key"];
+const calculationFunctions: Record<CalculationKey, (set: IDataSeries[], userInput: string) => string | null> =
+    {
+        max: maximumRevenue,
+        median: medianRevenue,
+        min: minimumRevenue,
+        quantile: quantileRevenue,
+    };
 
 export const useCustomCalculations = () => {
-    const [selectedCalculation, setSelectedCalculation] = useState<Calculation>(calculations[0]);
+    const [selectedCalculationKey, setSelectedCalculationKey] = useState<CalculationKey>("median");
+    const [userInput, setUserInput] = useState<string>("0.5");
+
+    const selectedCalculationInfo = useMemo(
+        () => calculationList.find((x) => x.key === selectedCalculationKey) as CalculationInfo,
+        [selectedCalculationKey],
+    );
+
+    const calculationFunction = useCallback(
+        (set: IDataSeries[]) => calculationFunctions[selectedCalculationKey](set, userInput),
+        [userInput, selectedCalculationKey],
+    );
 
     return {
-        selectedCalculation,
-        calculations,
-        selectCalculation: useCallback(
-            (key: CalculationKey) =>
-                setSelectedCalculation(calculations.find((x) => x.key === key) as Calculation),
-            [],
-        ),
+        calculationList,
+        calculationFunction,
+        selectedCalculationInfo,
+        selectCalculation: setSelectedCalculationKey,
+        userInput,
+        setUserInput,
     };
 };

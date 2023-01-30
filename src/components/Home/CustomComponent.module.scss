@@ -30,3 +30,9 @@
     }
     margin-bottom: 32px;
 }
+
+.FilterContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
