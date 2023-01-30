@@ -1,0 +1,32 @@
+@import "../../theme.scss";
+
+.CustomComponent {
+    border: 1px solid $color-border;
+    border-radius: 3px;
+    padding: 32px 16px;
+    min-width: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    select {
+        background: transparent;
+        border: none;
+        padding: 8px;
+        cursor: pointer;
+        border: 1px solid transparent;
+        transition: all 0.2s;
+        border-radius: 3px;
+
+        &:hover {
+            border: 1px solid $color-border;
+        }
+    }
+}
+
+.Value {
+    h2 {
+        margin: 0;
+    }
+    margin-bottom: 32px;
+}

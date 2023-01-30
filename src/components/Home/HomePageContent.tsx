@@ -4,6 +4,7 @@ import { FilterBar } from "./FilterBar";
 import styles from "./HomePageContent.module.scss";
 import { LineChart } from "@gooddata/sdk-ui-charts";
 import * as Md from "../../md/full";
+import { CustomComponent } from "./CustomComponent";
 
 const DEFAULT_LOCALE = "en-US";
 
@@ -30,6 +31,7 @@ export const HomePageContent: React.FC = () => {
                     measures={[Md.Revenue]}
                     config={{ legend: { position: "bottom" } }}
                 />
+                <CustomComponent />
             </div>
         </>
     );

@@ -1,5 +1,9 @@
 @import "./theme.scss";
 
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
     text-rendering: optimizeLegibility;
